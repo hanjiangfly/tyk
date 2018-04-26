@@ -184,8 +184,11 @@ func (h *HTTPDashboardHandler) DeRegister() error {
 
 	c := &http.Client{Timeout: 5 * time.Second}
 	resp, err := c.Do(req)
-	if err != nil || resp.StatusCode != 200 {
-		return fmt.Errorf("request failed with code %d and error %v", resp.StatusCode, err)
+	if err != nil {
+		return fmt.Errorf("deregister request failed with error %v", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("deregister request failed with status %v", resp.StatusCode)
 	}
 
 	defer resp.Body.Close()
